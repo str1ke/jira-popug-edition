@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  oauth-database:
+    image: postgres:14.2-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: oauth
+      POSTGRES_USER: oauth
+      POSTGRES_PASSWORD: oauth
+
+  oauth-server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ../common:/opt/common
+      - ./:/opt/app
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=oauth-database
+      - DB_DATABASE=oauth
+      - DB_USER=oauth
+      - DB_PASSWORD=oauth
+      - DB_DEBUG=${DB_DEBUG:-false}
+      - LOG_LEVEL=info
+
+networks:
+  default:
+    external:
+      name: jira-popug

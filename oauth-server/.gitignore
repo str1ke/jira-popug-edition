@@ -1,0 +1,11 @@
+# node.js modules
+node_modules
+
+# development
+.idea
+
+# local settings
+.env
+
+# docker data directories
+data
