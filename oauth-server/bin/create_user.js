@@ -2,6 +2,7 @@
 
 const db = require("../db");
 const userDao = require("../src/dao/user");
+const kafkaProducerClient = require("../src/clients/kafka_producer");
 
 const [email, password, role] = process.argv.slice(2);
 
@@ -12,11 +13,17 @@ if (!email || !password || !role) {
 
 (async () => {
   try {
-    await userDao.create({ email, password, role });
+    await kafkaProducerClient.connect();
+
+    const [ user ] = await userDao.create({ email, password, role });
+    await kafkaProducerClient.sendUserCreated(user);
+
+    await kafkaProducerClient.disconnect();
     await db.destroy();
+
     console.log("created");
   } catch (e) {
-    console.log("failed");
+    console.error("failed");
     console.error(e);
   }
 })();
