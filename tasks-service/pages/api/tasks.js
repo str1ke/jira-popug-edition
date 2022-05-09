@@ -1,5 +1,6 @@
 import userDao from "../../dao/user";
 import taskDao from "../../dao/task";
+import kafkaProducer from "../../clients/kafka_producer";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -15,6 +16,8 @@ export default async function handler(req, res) {
       const randomUserId = userIds[Math.floor(Math.random() * userIds.length)];
 
       const newTask = await taskDao.create({ userId: randomUserId, title: `${Date.now()}`, state: "new" });
+
+      await kafkaProducer.sendTaskCreated(newTask);
 
       res.status(201).json(newTask);
       break

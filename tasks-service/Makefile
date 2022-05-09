@@ -2,7 +2,7 @@ run:
 	docker compose up
 
 run-infra:
-	docker compose up database
+	docker compose up tasks-database
 
 run-app:
 	docker compose up tasks-service

@@ -28,6 +28,7 @@ services:
       - DB_PASSWORD=oauth
       - DB_DEBUG=${DB_DEBUG:-false}
       - LOG_LEVEL=info
+      - KAFKAJS_NO_PARTITIONER_WARNING=1
 
 networks:
   default:

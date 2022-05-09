@@ -28,6 +28,24 @@ services:
       - DB_PASSWORD=tasks
       - DB_DEBUG=${DB_DEBUG:-false}
       - LOG_LEVEL=info
+      - KAFKAJS_NO_PARTITIONER_WARNING=1
+
+  tasks-worker:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ../common:/opt/common
+      - ./:/opt/app
+    command: yarn run nodemon ./bin/worker.js
+    environment:
+      - DB_HOST=tasks-database
+      - DB_DATABASE=tasks
+      - DB_USER=tasks
+      - DB_PASSWORD=tasks
+      - DB_DEBUG=${DB_DEBUG:-false}
+      - LOG_LEVEL=info
+      - KAFKAJS_NO_PARTITIONER_WARNING=1
 
 networks:
   default:
