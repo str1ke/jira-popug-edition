@@ -1,13 +1,14 @@
-import nextConnect from 'next-connect'
-import auth from '../../../../middleware/auth'
-import passport from '../../../../lib/passport'
+import nextConnect from "next-connect";
 
-const handler = nextConnect()
+import passport from "../../../../lib/passport";
+import auth from "../../../../middleware/auth";
 
-handler.use(auth).use(passport.authenticate('popug-sso', { failureRedirect: '/login' }), (req, res) => {
-  res.setHeader('Location', '/');
+const handler = nextConnect();
+
+handler.use(auth).use(passport.authenticate("popug-sso", { failureRedirect: "/login" }), (req, res) => {
+  res.setHeader("Location", "/");
 
   res.status(302).send();
 });
 
-export default handler
+export default handler;

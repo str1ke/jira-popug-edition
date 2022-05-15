@@ -1,8 +1,8 @@
-import taskDao from "../../../../dao/task";
 import kafkaProducer from "../../../../clients/kafka_producer";
+import taskDao from "../../../../dao/task";
 
 export default async function userHandler(req, res) {
-  const { query: { id } } = req
+  const { query: { id } } = req;
 
   const task = await taskDao.findBy({ id }).first();
 
@@ -10,7 +10,7 @@ export default async function userHandler(req, res) {
     return res.status(404).send();
   }
 
-  const [ updatedTask ] = await taskDao.update({ id }, { state: "completed" });
+  const [updatedTask] = await taskDao.update({ id }, { state: "completed" });
 
   await kafkaProducer.sendTaskCompleted({
     taskId: task.id,

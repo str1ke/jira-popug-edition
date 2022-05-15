@@ -1,6 +1,6 @@
-import userDao from "../../dao/user";
-import taskDao from "../../dao/task";
 import kafkaProducer from "../../clients/kafka_producer";
+import taskDao from "../../dao/task";
+import userDao from "../../dao/user";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -11,7 +11,7 @@ export default async function handler(req, res) {
       res.status(200).json({ data: tasks });
 
       break;
-    case 'POST':
+    case "POST":
       const userIds = await userDao.pluck("id");
       const randomUserId = userIds[Math.floor(Math.random() * userIds.length)];
 
@@ -20,9 +20,9 @@ export default async function handler(req, res) {
       await kafkaProducer.sendTaskCreated(newTask);
 
       res.status(201).json(newTask);
-      break
+      break;
     default:
-      res.setHeader('Allow', ['GET', 'POST'])
-      res.status(405).end(`Method ${method} Not Allowed`)
+      res.setHeader("Allow", ["GET", "POST"]);
+      res.status(405).end(`Method ${method} Not Allowed`);
   }
 }

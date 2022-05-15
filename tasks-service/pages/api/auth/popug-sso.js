@@ -1,9 +1,10 @@
-import nextConnect from 'next-connect'
-import auth from '../../../middleware/auth'
-import passport from '../../../lib/passport'
+import nextConnect from "next-connect";
 
-const handler = nextConnect()
+import passport from "../../../lib/passport";
+import auth from "../../../middleware/auth";
 
-handler.use(auth).use(passport.authenticate('popug-sso'));
+const handler = nextConnect();
 
-export default handler
+handler.use(auth).use(passport.authenticate("popug-sso"));
+
+export default handler;

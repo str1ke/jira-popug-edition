@@ -1,1 +1,1 @@
-export { default } from "./strategy"
+export { default } from "./strategy";

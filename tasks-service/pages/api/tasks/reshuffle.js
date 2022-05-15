@@ -1,6 +1,6 @@
+import kafkaProducer from "../../../clients/kafka_producer";
 import taskDao from "../../../dao/task";
 import userDao from "../../../dao/user";
-import kafkaProducer from "../../../clients/kafka_producer";
 
 export default async function userHandler(req, res) {
   const userIds = await userDao.pluck("id");

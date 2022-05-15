@@ -3,5 +3,5 @@ export default (url) => fetch(url).then((r) => {
     throw new Error(r.status);
   }
 
-  return r.json()
-})
+  return r.json();
+});

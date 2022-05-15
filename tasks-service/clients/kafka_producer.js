@@ -1,25 +1,25 @@
-const { Kafka } = require("kafkajs")
+const { Kafka } = require("kafkajs");
 
-const clientId = "tasks-service"
-const brokers = ["broker:9092"]
+const clientId = "tasks-service";
+const brokers = ["broker:9092"];
 
-const kafka = new Kafka({ clientId, brokers })
-const producer = kafka.producer()
+const kafka = new Kafka({ clientId, brokers });
+const producer = kafka.producer();
 
 const businessTopic = "Tasks";
 const cudTopic = "TasksStream";
 
 (async () => {
   await producer.connect();
-})()
+})();
 
 module.exports.connect = async () => {
   await producer.connect();
-}
+};
 
 module.exports.disconnect = async () => {
   await producer.disconnect();
-}
+};
 
 module.exports.sendTaskCreated = async (task) => {
   const businessMessage = { type: "Tasks.Created" };
@@ -27,7 +27,7 @@ module.exports.sendTaskCreated = async (task) => {
     topic: businessTopic,
     messages: [{
       key: task.id,
-      value: JSON.stringify(businessMessage)
+      value: JSON.stringify(businessMessage),
     }],
   });
 
@@ -36,7 +36,7 @@ module.exports.sendTaskCreated = async (task) => {
     topic: cudTopic,
     messages: [{
       key: task.id,
-      value: JSON.stringify(cudMessage)
+      value: JSON.stringify(cudMessage),
     }],
   });
 };
@@ -47,7 +47,7 @@ module.exports.sendTaskAssigneeChanged = async ({ taskId, oldUserId, newUserId }
     topic: businessTopic,
     messages: [{
       key: taskId,
-      value: JSON.stringify(businessMessage)
+      value: JSON.stringify(businessMessage),
     }],
   });
 
@@ -56,7 +56,7 @@ module.exports.sendTaskAssigneeChanged = async ({ taskId, oldUserId, newUserId }
     topic: cudTopic,
     messages: [{
       key: taskId,
-      value: JSON.stringify(cudMessage)
+      value: JSON.stringify(cudMessage),
     }],
   });
 };
@@ -67,7 +67,7 @@ module.exports.sendTaskCompleted = async ({ taskId, userId }) => {
     topic: businessTopic,
     messages: [{
       key: taskId,
-      value: JSON.stringify(businessMessage)
+      value: JSON.stringify(businessMessage),
     }],
   });
 
@@ -76,7 +76,7 @@ module.exports.sendTaskCompleted = async ({ taskId, userId }) => {
     topic: cudTopic,
     messages: [{
       key: taskId,
-      value: JSON.stringify(cudMessage)
+      value: JSON.stringify(cudMessage),
     }],
   });
 };
