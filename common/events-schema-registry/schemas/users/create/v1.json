@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+
+  "title": "Users.Create.v1",
+  "description": "Json schema for user create event (version 1)",
+
+  "definitions": {
+    "eventData": {
+      "type": "object",
+      "properties": {
+        "publicId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": [
+        "publicId",
+        "name",
+        "email",
+        "role",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+
+  "type": "object",
+
+  "properties": {
+    "eventId": { "type": "string" },
+    "eventVersion": { "enum": [1] },
+    "eventName": { "type": "string" },
+    "eventTime": { "type": "number" },
+    "producer": { "type": "string" },
+
+    "data": { "$ref": "#/definitions/eventData" }
+  },
+
+  "required": [
+    "eventId",
+    "eventVersion",
+    "eventName",
+    "eventTime",
+    "producer",
+    "data"
+  ]
+}
