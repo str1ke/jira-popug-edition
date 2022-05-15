@@ -6,13 +6,13 @@ const ajv = new Ajv();
 
 const loadedSchemas = {};
 
-function loadSchema(path) {
+function loadSchema(schemaPath) {
   let schema;
 
   try {
-    schema = require(`./${path}`);
+    schema = require(`./${schemaPath}`);
   } catch (error) {
-    throw new Error(`cannot load schema: ${path}`);
+    throw new Error(`cannot load schema: ${schemaPath}`);
   }
 
   const compiledSchema = ajv.compile(schema);
@@ -27,9 +27,5 @@ module.exports = function validate(eventName, data) {
 
   const valid = schemaValidate(data);
 
-  if (!valid) {
-    throw new Error("data is not valid for schema");
-  }
-
-  return true;
+  return [valid, schemaValidate.errors];
 };

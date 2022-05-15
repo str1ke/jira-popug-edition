@@ -92,22 +92,8 @@ module.exports = {
         "caseInsensitive": true,
       },
     }],
-
-    "import/no-extraneous-dependencies": ["error", {
-      "devDependencies": [
-        "**/*.test_double.js",
-        "**/*.spec.js",
-        "/spec/**/*.js",
-      ],
-    }],
   },
   "overrides": [{
-    "files": ["*.spec.js"],
-    "rules": {
-      "no-unused-expressions": "off",
-      "max-len": "off",
-    },
-  }, {
     "files": ["errors.js"],
     "rules": {
       "max-classes-per-file": "off",
