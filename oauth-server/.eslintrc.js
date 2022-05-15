@@ -41,6 +41,7 @@ module.exports = {
     "consistent-return": "off",
     "no-control-regex": "off",
 
+    "no-shadow": ["error", { "allow": ["error"] }],
     "curly": ["error", "all"],
     "quote-props": ["error", "consistent"],
     "arrow-parens": ["error", "always"],

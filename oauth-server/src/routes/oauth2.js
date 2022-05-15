@@ -156,22 +156,22 @@ server.exchange(oauth2orize.exchange.refreshToken((client, refreshToken, scope, 
   db.refreshTokens.find(refreshToken, (error, token) => {
     if (error) { return done(error); }
 
-    issueTokens(token.id, client.id, (err, accessToken, refreshToken) => {
+    issueTokens(token.id, client.id, (err, accessToken, newRefreshToken) => {
       if (err) {
         done(err, null, null);
       }
 
-      db.accessTokens.removeByUserIdAndClientId(token.userId, token.clientId, (err) => {
-        if (err) {
-          done(err, null, null);
+      db.accessTokens.removeByUserIdAndClientId(token.userId, token.clientId, (error) => {
+        if (error) {
+          done(error, null, null);
         }
 
-        db.refreshTokens.removeByUserIdAndClientId(token.userId, token.clientId, (err) => {
-          if (err) {
-            done(err, null, null);
+        db.refreshTokens.removeByUserIdAndClientId(token.userId, token.clientId, (error) => {
+          if (error) {
+            done(error, null, null);
           }
 
-          done(null, accessToken, refreshToken);
+          done(null, accessToken, newRefreshToken);
         });
       });
     });

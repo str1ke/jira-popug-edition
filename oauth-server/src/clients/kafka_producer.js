@@ -1,39 +1,51 @@
-const { Kafka } = require("kafkajs")
+const { Kafka } = require("kafkajs");
+const { v4: uuidv4 } = require("uuid");
 
-const clientId = "oauth-server"
-const brokers = ["broker:9092"]
+const { validate: schemaValidate } = require("../../../common/events-schema-registry");
 
-const kafka = new Kafka({ clientId, brokers })
-const producer = kafka.producer()
+const clientId = "oauth-server";
+const brokers = ["broker:9092"];
 
-const businessTopic = "Users";
+const kafka = new Kafka({ clientId, brokers });
+const producer = kafka.producer();
+
 const cudTopic = "UsersStream";
 
 module.exports.connect = async () => {
   await producer.connect();
-}
+};
 
 module.exports.disconnect = async () => {
   await producer.disconnect();
-}
+};
 
-module.exports.sendUserCreated = async (user) => {
-  const businessMessage = { type: "Users.Created" };
-  await producer.send({
-    topic: businessTopic,
-    messages: [{
-      key: user.id,
-      value: JSON.stringify(businessMessage)
-    }],
-  });
+module.exports.emitUserCreated = async (user) => {
+  const message = {
+    eventId: uuidv4(),
+    eventVersion: 1,
+    eventName: "users/create",
+    eventTime: (new Date()).toISOString(),
+    producer: "oauth-server",
+    data: {
+      publicId: user.publicId,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
+    },
+  };
 
-  const { password, ...userWoPass } = user;
-  const cudMessage = { type: "Users.Created", payload: userWoPass };
+  const [isValid, errors] = schemaValidate("users/create/v1", message);
+
+  if (!isValid) {
+    console.error(errors);
+    throw new Error("Invalid message");
+  }
+
   await producer.send({
     topic: cudTopic,
     messages: [{
-      key: user.id,
-      value: JSON.stringify(cudMessage)
+      value: JSON.stringify(message),
     }],
   });
 };

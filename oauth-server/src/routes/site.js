@@ -1,4 +1,5 @@
 const passport = require("passport");
+
 const { users } = require("../db");
 
 module.exports.loginForm = (request, response) => response.render("login");
@@ -16,4 +17,4 @@ module.exports.signup = (req, res) => {
   users.create(req.body, (err, result) => {
     res.json(result || err);
   });
-}
+};
